@@ -1,0 +1,173 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Three.js Tests</title>
+  <meta charset=utf-8>
+
+  <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700|Roboto+Slab|Roboto:300,100' rel='stylesheet' type='text/css'>
+
+  <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+  <link rel="icon" href="/favicon.ico" type="image/x-icon">
+
+  <meta name="description" content="this page is for testing purpose only">
+  <meta name="keywords" content="Three.js testing page">
+  <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1, min-scale=1">
+
+  <style>canvas { width: 100%; height: 100% }</style>
+</head>
+<body>
+  <script src="https://rawgithub.com/mrdoob/three.js/master/build/three.js"></script>
+  <script>
+    function Cube(object, x, y, z, size) {
+      this.geometry = new THREE.CubeGeometry(size, size, size);
+      this.material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
+      this.cube = new THREE.Mesh(this.geometry, this.material);
+      //this.cube.castShadow = true;
+      //this.receiveShadow = true;
+      this.node = new THREE.Object3D();
+      this.node.add(this.cube);
+      this.node.position.x = x;
+      this.node.position.y = y;
+      this.node.position.z = z;
+      object.add(this.node);
+    }
+    Cube.prototype.add = function(object){
+        this.node.add(object);
+    }
+    function Sphere(object, x, y, z, size) {
+      this.geometry = new THREE.SphereGeometry(size, 10, 10);
+      this.material = new THREE.MeshLambertMaterial( { color: 0xffffff } );
+      this.cube = new THREE.Mesh(this.geometry, this.material);
+      //this.cube.castShadow = true;
+      //this.receiveShadow = true;
+      this.node = new THREE.Object3D();
+      this.node.add(this.cube);
+      this.node.position.x = x;
+      this.node.position.y = y;
+      this.node.position.z = z;
+      object.add(this.node);
+    }
+    Sphere.prototype.add = function(object){
+        this.node.add(object);
+    }
+    function Tentacle(object, x, y, z, scale) {
+      this.object_lists = new Array();
+      var sub_cube = cube;
+      for (var i=0; i < 30; i=i+1) {
+        sub_cube = new Sphere(sub_cube, x, y, z, 1);
+        sub_cube.node.scale = new THREE.Vector3( scale, scale, scale);
+        this.object_lists.push(sub_cube);
+      }
+    }
+    Tentacle.prototype.rotate = function(x, y, z){
+      this.object_lists.forEach(function(object) {
+        object.node.rotation.x = x;
+        object.node.rotation.y = y;
+        object.node.rotation.z = z;
+      }); 
+    }
+    Tentacle.prototype.scale = function(x, y, z){
+      this.object_lists.forEach(function(object) {
+        object.node.scale =  new THREE.Vector3( x, y, z );
+      }); 
+    }
+    function Random(max) {
+      this._seed = Math.random()/100;
+      this._max = max;
+      this._phase = 0;
+    }
+    Random.prototype.value = function() {
+      this._phase = this._phase + this._seed;
+      return this._max * Math.sin(this._phase);
+    }
+    // Set the scene and the renderer
+    var scene = new THREE.Scene();
+    var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+    var renderer = new THREE.WebGLRenderer( {antialias:true} );
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    //renderer.shadowMapEnabled = true;
+    //renderer.shadowMapSoft = true;
+    //renderer.shadowMapType = THREE.PCFSoftShadowMap;
+    document.body.appendChild(renderer.domElement);
+    // Set Ambiant light
+    var light = new THREE.AmbientLight( 0x303030 ); // soft white light
+    scene.add( light );
+    // Set two spotlight
+    var spotlight = new THREE.SpotLight(0x404040);
+    spotlight.position.set(30,50,30);
+    spotlight.shadowDarkness = 0.5;
+    spotlight.intensity = 1;
+    spotlight.castShadow = true;
+    spotlight.shadowMapWidth = 1024; // default is 512
+    spotlight.shadowMapHeight = 1024; // default is 512
+    scene.add(spotlight);
+    var spotlight2 = new THREE.SpotLight(0x404040);
+    spotlight2.position.set(-30,50,30);
+    spotlight2.shadowDarkness = 0.5;
+    spotlight2.intensity = 1;
+    spotlight2.castShadow = true;
+    spotlight2.shadowMapWidth = 1024; // default is 512
+    spotlight2.shadowMapHeight = 1024; // default is 512
+    scene.add(spotlight2);
+    // set up the main object
+    var cube = new Cube(scene, 0, 0, 0, 1);
+    var tentacleUp = new Tentacle(cube, 0, 1, 0, 0.9);
+    var tentacleDown = new Tentacle(cube, 0, -1, 0, 0.8);
+    var tentacleRight = new Tentacle(cube, 1, 0, 0, 0.8);
+    var tentacleLeft = new Tentacle(cube, -1, 0, 0, 0.8);
+    var tentacleFront = new Tentacle(cube, 0, 0, 1, 0.8);
+    var tentacleBack = new Tentacle(cube, 0, 0, -1, 0.8);
+    /* don't set up the floor
+    var geometry2 = new THREE.CubeGeometry(40, 0.1, 40);
+    var material2 = new THREE.M eshLambertMaterial( { color: 0xffffff } );
+    var floor = new THREE.Mesh(geometry2, material2);
+    floor.receiveShadow = true;
+    scene.add(floor);
+    floor.position.y = -10;*/
+
+    camera.position.z = 10;
+
+    var Rx =  new Random(0.5);
+    var Ry =  new Random(0.5);
+    var Rz =  new Random(0.5);
+    //var Sx =  new Random(0.2);
+    //var Sy =  new Random(0.2);
+    //var Sz =  new Random(0.2);
+
+    var render = function () {
+      requestAnimationFrame(render);
+
+      cube.node.rotation.x += 0.005;
+      cube.node.rotation.y += 0.007;
+
+      var rx = Rx.value();
+      var ry = Ry.value();
+      rz = Rz.value();
+      tentacleUp.rotate(rx,ry,rz);
+      tentacleDown.rotate(rx,ry,rz);
+      tentacleRight.rotate(rx,ry,rz);
+      tentacleLeft.rotate(rx,ry,rz);
+      tentacleFront.rotate(rx,ry,rz);
+      tentacleBack.rotate(rx,ry,rz);
+/* 
+      sx = Rx.value();
+      sy = Ry.value();
+      sz = Rz.value();
+      sx = sx*sx;
+      sy = sy*sy;
+      sz = sz*sz;
+      tentacleUp.scale(0.95-sx, 0.95-sy, 0.95-sz);
+      tentacleDown.scale(0.95-sx, 0.95-sy, 0.95-sz);
+      tentacleRight.scale(0.95-sx, 0.95-sy, 0.95-sz);
+      tentacleLeft.scale(0.95-sx, 0.95-sy, 0.95-sz);
+      tentacleFront.scale(0.95-sx, 0.95-sy, 0.95-sz);
+      tentacleBack.scale(0.95-sx, 0.95-sy, 0.95-sz);
+*/
+      renderer.render(scene, camera);
+    };
+
+    render();
+  </script>
+</body>
+</html>
