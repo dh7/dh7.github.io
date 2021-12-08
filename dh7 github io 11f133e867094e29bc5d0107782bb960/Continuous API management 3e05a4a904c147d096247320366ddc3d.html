@@ -1,0 +1,661 @@
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=utf-8"/><title>Continuous API management</title><style>
+/* cspell:disable-file */
+/* webkit printing magic: print all background colors */
+html {
+	-webkit-print-color-adjust: exact;
+}
+* {
+	box-sizing: border-box;
+	-webkit-print-color-adjust: exact;
+}
+
+html,
+body {
+	margin: 0;
+	padding: 0;
+}
+@media only screen {
+	body {
+		margin: 2em auto;
+		max-width: 900px;
+		color: rgb(55, 53, 47);
+	}
+}
+
+body {
+	line-height: 1.5;
+	white-space: pre-wrap;
+}
+
+a,
+a.visited {
+	color: inherit;
+	text-decoration: underline;
+}
+
+.pdf-relative-link-path {
+	font-size: 80%;
+	color: #444;
+}
+
+h1,
+h2,
+h3 {
+	letter-spacing: -0.01em;
+	line-height: 1.2;
+	font-weight: 600;
+	margin-bottom: 0;
+}
+
+.page-title {
+	font-size: 2.5rem;
+	font-weight: 700;
+	margin-top: 0;
+	margin-bottom: 0.75em;
+}
+
+h1 {
+	font-size: 1.875rem;
+	margin-top: 1.875rem;
+}
+
+h2 {
+	font-size: 1.5rem;
+	margin-top: 1.5rem;
+}
+
+h3 {
+	font-size: 1.25rem;
+	margin-top: 1.25rem;
+}
+
+.source {
+	border: 1px solid #ddd;
+	border-radius: 3px;
+	padding: 1.5em;
+	word-break: break-all;
+}
+
+.callout {
+	border-radius: 3px;
+	padding: 1rem;
+}
+
+figure {
+	margin: 1.25em 0;
+	page-break-inside: avoid;
+}
+
+figcaption {
+	opacity: 0.5;
+	font-size: 85%;
+	margin-top: 0.5em;
+}
+
+mark {
+	background-color: transparent;
+}
+
+.indented {
+	padding-left: 1.5em;
+}
+
+hr {
+	background: transparent;
+	display: block;
+	width: 100%;
+	height: 1px;
+	visibility: visible;
+	border: none;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.09);
+}
+
+img {
+	max-width: 100%;
+}
+
+@media only print {
+	img {
+		max-height: 100vh;
+		object-fit: contain;
+	}
+}
+
+@page {
+	margin: 1in;
+}
+
+.collection-content {
+	font-size: 0.875rem;
+}
+
+.column-list {
+	display: flex;
+	justify-content: space-between;
+}
+
+.column {
+	padding: 0 1em;
+}
+
+.column:first-child {
+	padding-left: 0;
+}
+
+.column:last-child {
+	padding-right: 0;
+}
+
+.table_of_contents-item {
+	display: block;
+	font-size: 0.875rem;
+	line-height: 1.3;
+	padding: 0.125rem;
+}
+
+.table_of_contents-indent-1 {
+	margin-left: 1.5rem;
+}
+
+.table_of_contents-indent-2 {
+	margin-left: 3rem;
+}
+
+.table_of_contents-indent-3 {
+	margin-left: 4.5rem;
+}
+
+.table_of_contents-link {
+	text-decoration: none;
+	opacity: 0.7;
+	border-bottom: 1px solid rgba(55, 53, 47, 0.18);
+}
+
+table,
+th,
+td {
+	border: 1px solid rgba(55, 53, 47, 0.09);
+	border-collapse: collapse;
+}
+
+table {
+	border-left: none;
+	border-right: none;
+}
+
+th,
+td {
+	font-weight: normal;
+	padding: 0.25em 0.5em;
+	line-height: 1.5;
+	min-height: 1.5em;
+	text-align: left;
+}
+
+th {
+	color: rgba(55, 53, 47, 0.6);
+}
+
+ol,
+ul {
+	margin: 0;
+	margin-block-start: 0.6em;
+	margin-block-end: 0.6em;
+}
+
+li > ol:first-child,
+li > ul:first-child {
+	margin-block-start: 0.6em;
+}
+
+ul > li {
+	list-style: disc;
+}
+
+ul.to-do-list {
+	text-indent: -1.7em;
+}
+
+ul.to-do-list > li {
+	list-style: none;
+}
+
+.to-do-children-checked {
+	text-decoration: line-through;
+	opacity: 0.375;
+}
+
+ul.toggle > li {
+	list-style: none;
+}
+
+ul {
+	padding-inline-start: 1.7em;
+}
+
+ul > li {
+	padding-left: 0.1em;
+}
+
+ol {
+	padding-inline-start: 1.6em;
+}
+
+ol > li {
+	padding-left: 0.2em;
+}
+
+.mono ol {
+	padding-inline-start: 2em;
+}
+
+.mono ol > li {
+	text-indent: -0.4em;
+}
+
+.toggle {
+	padding-inline-start: 0em;
+	list-style-type: none;
+}
+
+/* Indent toggle children */
+.toggle > li > details {
+	padding-left: 1.7em;
+}
+
+.toggle > li > details > summary {
+	margin-left: -1.1em;
+}
+
+.selected-value {
+	display: inline-block;
+	padding: 0 0.5em;
+	background: rgba(206, 205, 202, 0.5);
+	border-radius: 3px;
+	margin-right: 0.5em;
+	margin-top: 0.3em;
+	margin-bottom: 0.3em;
+	white-space: nowrap;
+}
+
+.collection-title {
+	display: inline-block;
+	margin-right: 1em;
+}
+
+.simple-table {
+	margin-top: 1em;
+	font-size: 0.875rem;
+}
+
+.simple-table-header {
+	background: rgb(247, 246, 243);
+	color: black;
+	font-weight: 500;
+}
+
+time {
+	opacity: 0.5;
+}
+
+.icon {
+	display: inline-block;
+	max-width: 1.2em;
+	max-height: 1.2em;
+	text-decoration: none;
+	vertical-align: text-bottom;
+	margin-right: 0.5em;
+}
+
+img.icon {
+	border-radius: 3px;
+}
+
+.user-icon {
+	width: 1.5em;
+	height: 1.5em;
+	border-radius: 100%;
+	margin-right: 0.5rem;
+}
+
+.user-icon-inner {
+	font-size: 0.8em;
+}
+
+.text-icon {
+	border: 1px solid #000;
+	text-align: center;
+}
+
+.page-cover-image {
+	display: block;
+	object-fit: cover;
+	width: 100%;
+	height: 30vh;
+}
+
+.page-header-icon {
+	font-size: 3rem;
+	margin-bottom: 1rem;
+}
+
+.page-header-icon-with-cover {
+	margin-top: -0.72em;
+	margin-left: 0.07em;
+}
+
+.page-header-icon img {
+	border-radius: 3px;
+}
+
+.link-to-page {
+	margin: 1em 0;
+	padding: 0;
+	border: none;
+	font-weight: 500;
+}
+
+p > .user {
+	opacity: 0.5;
+}
+
+td > .user,
+td > time {
+	white-space: nowrap;
+}
+
+input[type="checkbox"] {
+	transform: scale(1.5);
+	margin-right: 0.6em;
+	vertical-align: middle;
+}
+
+p {
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
+}
+
+.image {
+	border: none;
+	margin: 1.5em 0;
+	padding: 0;
+	border-radius: 0;
+	text-align: center;
+}
+
+.code,
+code {
+	background: rgba(135, 131, 120, 0.15);
+	border-radius: 3px;
+	padding: 0.2em 0.4em;
+	border-radius: 3px;
+	font-size: 85%;
+	tab-size: 2;
+}
+
+code {
+	color: #eb5757;
+}
+
+.code {
+	padding: 1.5em 1em;
+}
+
+.code-wrap {
+	white-space: pre-wrap;
+	word-break: break-all;
+}
+
+.code > code {
+	background: none;
+	padding: 0;
+	font-size: 100%;
+	color: inherit;
+}
+
+blockquote {
+	font-size: 1.25em;
+	margin: 1em 0;
+	padding-left: 1em;
+	border-left: 3px solid rgb(55, 53, 47);
+}
+
+.bookmark {
+	text-decoration: none;
+	max-height: 8em;
+	padding: 0;
+	display: flex;
+	width: 100%;
+	align-items: stretch;
+}
+
+.bookmark-title {
+	font-size: 0.85em;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	height: 1.75em;
+	white-space: nowrap;
+}
+
+.bookmark-text {
+	display: flex;
+	flex-direction: column;
+}
+
+.bookmark-info {
+	flex: 4 1 180px;
+	padding: 12px 14px 14px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.bookmark-image {
+	width: 33%;
+	flex: 1 1 180px;
+	display: block;
+	position: relative;
+	object-fit: cover;
+	border-radius: 1px;
+}
+
+.bookmark-description {
+	color: rgba(55, 53, 47, 0.6);
+	font-size: 0.75em;
+	overflow: hidden;
+	max-height: 4.5em;
+	word-break: break-word;
+}
+
+.bookmark-href {
+	font-size: 0.75em;
+	margin-top: 0.25em;
+}
+
+.sans { font-family: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol"; }
+.code { font-family: "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace; }
+.serif { font-family: Lyon-Text, Georgia, ui-serif, serif; }
+.mono { font-family: iawriter-mono, Nitti, Menlo, Courier, monospace; }
+.pdf .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK JP'; }
+.pdf:lang(zh-CN) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK SC'; }
+.pdf:lang(zh-TW) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK TC'; }
+.pdf:lang(ko-KR) .sans { font-family: Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, "Apple Color Emoji", Arial, sans-serif, "Segoe UI Emoji", "Segoe UI Symbol", 'Twemoji', 'Noto Color Emoji', 'Noto Sans CJK KR'; }
+.pdf .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .code { font-family: Source Code Pro, "SFMono-Regular", Menlo, Consolas, "PT Mono", "Liberation Mono", Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.pdf .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK JP'; }
+.pdf:lang(zh-CN) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK SC'; }
+.pdf:lang(zh-TW) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK TC'; }
+.pdf:lang(ko-KR) .serif { font-family: PT Serif, Lyon-Text, Georgia, ui-serif, serif, 'Twemoji', 'Noto Color Emoji', 'Noto Serif CJK KR'; }
+.pdf .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK JP'; }
+.pdf:lang(zh-CN) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK SC'; }
+.pdf:lang(zh-TW) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK TC'; }
+.pdf:lang(ko-KR) .mono { font-family: PT Mono, iawriter-mono, Nitti, Menlo, Courier, monospace, 'Twemoji', 'Noto Color Emoji', 'Noto Sans Mono CJK KR'; }
+.highlight-default {
+	color: rgba(55, 53, 47, 1);
+}
+.highlight-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(145, 145, 142, 1);
+}
+.highlight-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(187, 132, 108, 1);
+}
+.highlight-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(215, 129, 58, 1);
+}
+.highlight-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 148, 51, 1);
+}
+.highlight-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(108, 155, 125, 1);
+}
+.highlight-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(91, 151, 189, 1);
+}
+.highlight-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(167, 130, 195, 1);
+}
+.highlight-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(205, 116, 159, 1);
+}
+.highlight-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(225, 111, 100, 1);
+}
+.highlight-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.highlight-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.highlight-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.highlight-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.highlight-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.highlight-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.highlight-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.highlight-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.highlight-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.block-color-default {
+	color: inherit;
+	fill: inherit;
+}
+.block-color-gray {
+	color: rgba(120, 119, 116, 1);
+	fill: rgba(145, 145, 142, 1);
+}
+.block-color-brown {
+	color: rgba(159, 107, 83, 1);
+	fill: rgba(187, 132, 108, 1);
+}
+.block-color-orange {
+	color: rgba(217, 115, 13, 1);
+	fill: rgba(215, 129, 58, 1);
+}
+.block-color-yellow {
+	color: rgba(203, 145, 47, 1);
+	fill: rgba(203, 148, 51, 1);
+}
+.block-color-teal {
+	color: rgba(68, 131, 97, 1);
+	fill: rgba(108, 155, 125, 1);
+}
+.block-color-blue {
+	color: rgba(51, 126, 169, 1);
+	fill: rgba(91, 151, 189, 1);
+}
+.block-color-purple {
+	color: rgba(144, 101, 176, 1);
+	fill: rgba(167, 130, 195, 1);
+}
+.block-color-pink {
+	color: rgba(193, 76, 138, 1);
+	fill: rgba(205, 116, 159, 1);
+}
+.block-color-red {
+	color: rgba(212, 76, 71, 1);
+	fill: rgba(225, 111, 100, 1);
+}
+.block-color-gray_background {
+	background: rgba(241, 241, 239, 1);
+}
+.block-color-brown_background {
+	background: rgba(244, 238, 238, 1);
+}
+.block-color-orange_background {
+	background: rgba(251, 236, 221, 1);
+}
+.block-color-yellow_background {
+	background: rgba(251, 243, 219, 1);
+}
+.block-color-teal_background {
+	background: rgba(237, 243, 236, 1);
+}
+.block-color-blue_background {
+	background: rgba(231, 243, 248, 1);
+}
+.block-color-purple_background {
+	background: rgba(244, 240, 247, 0.8);
+}
+.block-color-pink_background {
+	background: rgba(249, 238, 243, 0.8);
+}
+.block-color-red_background {
+	background: rgba(253, 235, 236, 1);
+}
+.select-value-color-pink { background-color: rgba(245, 224, 233, 1); }
+.select-value-color-purple { background-color: rgba(232, 222, 238, 1); }
+.select-value-color-green { background-color: rgba(219, 237, 219, 1); }
+.select-value-color-gray { background-color: rgba(227, 226, 224, 1); }
+.select-value-color-orange { background-color: rgba(250, 222, 201, 1); }
+.select-value-color-brown { background-color: rgba(238, 224, 218, 1); }
+.select-value-color-red { background-color: rgba(255, 226, 221, 1); }
+.select-value-color-yellow { background-color: rgba(253, 236, 200, 1); }
+.select-value-color-blue { background-color: rgba(211, 229, 239, 1); }
+
+.checkbox {
+	display: inline-flex;
+	vertical-align: text-bottom;
+	width: 16;
+	height: 16;
+	background-size: 16px;
+	margin-left: 2px;
+	margin-right: 5px;
+}
+
+.checkbox-on {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20width%3D%2216%22%20height%3D%2216%22%20fill%3D%22%2358A9D7%22%2F%3E%0A%3Cpath%20d%3D%22M6.71429%2012.2852L14%204.9995L12.7143%203.71436L6.71429%209.71378L3.28571%206.2831L2%207.57092L6.71429%2012.2852Z%22%20fill%3D%22white%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+
+.checkbox-off {
+	background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2216%22%20viewBox%3D%220%200%2016%2016%22%20fill%3D%22none%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%0A%3Crect%20x%3D%220.75%22%20y%3D%220.75%22%20width%3D%2214.5%22%20height%3D%2214.5%22%20fill%3D%22white%22%20stroke%3D%22%2336352F%22%20stroke-width%3D%221.5%22%2F%3E%0A%3C%2Fsvg%3E");
+}
+	
+</style></head><body><article id="3e05a4a9-04c1-47d0-9624-7320366ddc3d" class="page sans"><header><div class="page-header-icon undefined"><span class="icon">📗</span></div><h1 class="page-title">Continuous API management</h1></header><div class="page-body"><figure id="8c041157-77d0-4479-90d8-b6f73cfae694" class="image"><a href="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-1973885540390416323-297972269.jpg"><img style="width:336px" src="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-1973885540390416323-297972269.jpg"/></a></figure><p id="f1e9532d-ce58-4f74-a04e-126e6a0cfafe" class="">
+</p><ul id="7e2da357-dce9-44a2-bd90-83134f382d7b" class="toggle"><li><details open=""><summary>The 3 part of an API</summary><p id="fbf0ba5b-4a23-49b3-b5c5-019db7016e20" class="">It&#x27;s useful to think about an API as 3 things that can (and should be) decoupled.</p><figure id="f56c06ba-6ac7-4b20-b09e-935b6a76de82" class="image"><a href="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/Untitled.png"><img style="width:1092px" src="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/Untitled.png"/></a></figure><ul id="a58c2a8d-ed05-4e1f-964d-c841a5c7975b" class="toggle"><li><details open=""><summary>The interface</summary><p id="4eb9cfcb-fa6f-4c52-ab50-6d2195017b64" class="">The definition of the interface, the documentation, and the code of the interface itself</p><p id="a7a1843a-34e9-4242-8227-d1e694a1a394" class="">→ For the interface we want to optimise the client experience.</p></details></li></ul><ul id="15bada38-6117-4b44-bd45-da372032694a" class="toggle"><li><details open=""><summary>The implementation</summary><p id="6362c663-645f-439f-a9f0-12246b7aa613" class="">The code that implement the work the API is suppose to do.</p><p id="2da8e998-666d-451d-8788-518c73ce3f5f" class="">In our case image processing, manipulation and storing.</p><p id="e439d0c6-e858-43b6-81cd-9dba019693ad" class="">The way the image processing is done, and the logic behind can be different than the interface.</p><p id="84ccbf0c-2cb9-4136-99da-9e145faff0ed" class="">→ Implementation wants to be efficient</p></details></li></ul><ul id="977b987b-34da-458a-b7e3-419d052809bc" class="toggle"><li><details open=""><summary>The instance</summary><p id="3580dd87-e3c3-4670-8ee4-f8ee2fb42e60" class="">From the code of the interface and from the code of the implementation, we can run an instance</p><p id="4a531b29-42b0-4e8c-bcf7-afd82259b237" class="">→ an instance wants to be up and running all the time, fast, and need to be monitored.</p></details></li></ul></details></li></ul><ul id="102ec95b-1cf4-490e-823f-ad3694aceaa2" class="toggle"><li><details open=""><summary>The 10 pillars of an API</summary><ul id="2e3671d4-3742-4932-80d9-4f2b7afa9425" class="toggle"><li><details open=""><summary>Strategy</summary><p id="7e892538-16f9-4c86-a89c-fe7e2c17d5b1" class="">Need to answer 2 questions:</p><ul id="c58f8c40-4256-4291-8a08-9e99f394eb1d" class="bulleted-list"><li style="list-style-type:disc">Why do you want to build an API?<ul id="1c8b4fa8-5343-4c2b-8579-997a8bb2d14d" class="bulleted-list"><li style="list-style-type:circle">Monetise internal assets?</li></ul><ul id="9e7c7642-0dec-4c51-99d3-83510ce91768" class="bulleted-list"><li style="list-style-type:circle">Harvest business data?</li></ul><ul id="fffb833e-1902-48f9-a299-a0cc2d6b1d81" class="bulleted-list"><li style="list-style-type:circle">Increase business aligned capabilities in your platform?</li></ul></li></ul><ul id="26d17ba6-9715-4c6a-920e-9add9dd29da8" class="bulleted-list"><li style="list-style-type:disc">How the API will help you reach that goal?<ul id="caea58e2-2293-414d-8d65-5a56c1144e65" class="bulleted-list"><li style="list-style-type:circle">How the strategic impact measured?</li></ul><ul id="fadc86d4-c232-4ba8-8eb0-511bf2b4e591" class="bulleted-list"><li style="list-style-type:circle">When the strategy change?</li></ul></li></ul></details></li></ul><ul id="c628fa22-09ac-4487-aeb3-1c1999a9fd82" class="toggle"><li><details open=""><summary>Design</summary><ul id="e2c82f89-d815-4ea8-9b5a-fd91224143e8" class="bulleted-list"><li style="list-style-type:disc">Vocabularies</li></ul><ul id="e51664a6-1b26-4a85-bcc3-9aaddab3a8a5" class="bulleted-list"><li style="list-style-type:disc">Styles</li></ul><ul id="70c0e33a-0805-49c4-a0ce-1533699e06c6" class="bulleted-list"><li style="list-style-type:disc">Interactions</li></ul><ul id="a1b7b545-510e-4aeb-95be-7fb624cb3ad3" class="bulleted-list"><li style="list-style-type:disc">Safety</li></ul><ul id="5af0fbb8-38f4-4a4e-a228-0b307a9a672c" class="bulleted-list"><li style="list-style-type:disc">Consistency</li></ul><p id="2b206b9d-5a50-4e0b-aa1f-e59c7b9d6c41" class="">→ <a href="https://spec.openapis.org/oas/latest.html#openapi-specification">openAPI</a> spec can help</p></details></li></ul><ul id="23d1b1a9-db62-4aa6-b2da-57ba6470e940" class="toggle"><li><details open=""><summary>Documentation</summary><p id="6563407c-112a-4b91-acbb-c2f460f6e1cd" class=""><strong>2 Styles</strong></p><ul id="783193a0-ead9-40a5-84e6-b322092a3ca5" class="bulleted-list"><li style="list-style-type:disc">Tell don&#x27;t teach<ul id="635ae69d-f3d4-44ef-99e0-4b351407f2a1" class="bulleted-list"><li style="list-style-type:circle">When it&#x27;s explained in details what the API does</li></ul></li></ul><ul id="d7e38dd5-5a1b-4361-892c-c36e880df2bc" class="bulleted-list"><li style="list-style-type:disc">Teach don&#x27;t tell<ul id="223ac0a0-c8a2-4c74-b4af-bd53b792b951" class="bulleted-list"><li style="list-style-type:circle">When there are just examples</li></ul></li></ul><p id="92894220-a903-473f-b29d-27c9e480dae7" class=""><strong>When write the doc?</strong></p><ul id="a70c2e15-1a8f-4fc8-bdbb-080ac8d7efee" class="bulleted-list"><li style="list-style-type:disc">early and often<ul id="5b16ac40-60c0-4da6-9ccb-5fd98695c508" class="bulleted-list"><li style="list-style-type:circle">If needed to check if there are some design issues</li></ul></li></ul><ul id="d37b9944-5804-4e8c-93bf-c38d56a82258" class="bulleted-list"><li style="list-style-type:disc">at the end<ul id="7c435853-715c-40a9-b4e6-4fcc6360545c" class="bulleted-list"><li style="list-style-type:circle">If priority is to save time and write a coherent piece.</li></ul></li></ul><p id="23f31961-851b-45b0-8055-3f1dc59088d3" class="">→ using API description close to the code is a way to keep the doc in sync</p></details></li></ul><ul id="82cff983-9f32-4035-9230-b99a38484a2e" class="toggle"><li><details open=""><summary>Testing</summary><p id="73cf4e16-efae-4d51-b266-3c4edb28f3ba" class="">Quality == testing</p><p id="7bcb6336-c66a-44e2-b93a-e1da76036133" class="">Need decisions about what to test and how to test</p><p id="3d476e8b-2379-4486-9790-afec854a5b09" class="">How much testing is enough?</p><p id="2f895e94-a461-478c-8525-2b05a8161fe8" class=""><strong>What can be tested?</strong><div class="indented"><ul id="9afb1b47-f657-4d13-8eb5-519f15872791" class="bulleted-list"><li style="list-style-type:disc">Usability<ul id="0c7d4533-f5be-4776-a436-b37df2d5a2fb" class="bulleted-list"><li style="list-style-type:circle">check if users have trouble using it</li></ul></li></ul><ul id="04e6608b-50de-4ee2-bb31-d171d92288d4" class="bulleted-list"><li style="list-style-type:disc">Unit testing<ul id="7aa844a3-9de6-413d-806c-81d4ef6dec31" class="bulleted-list"><li style="list-style-type:circle">Identify bugs in the implementation code at a granular level</li></ul></li></ul><ul id="26434d4f-59c9-4de5-914e-a0cc906cc340" class="bulleted-list"><li style="list-style-type:disc">Integration testing<ul id="ec4aae1b-b391-4a31-8f26-b3f09666f182" class="bulleted-list"><li style="list-style-type:circle">Identify bugs by making API calls against an instance</li></ul></li></ul><ul id="23f83780-de30-4c58-9f2c-62fad9be17de" class="bulleted-list"><li style="list-style-type:disc">Performance and load testing<ul id="375dec11-b1c9-420b-ac7a-9f910d38ba9a" class="bulleted-list"><li style="list-style-type:circle">Identify non-functional bugs in a deployed API instance</li></ul></li></ul><ul id="2344b278-332d-463b-b512-797461ac65ca" class="bulleted-list"><li style="list-style-type:disc">Security testing<ul id="f331b0c7-4e36-49b6-8b6d-84b90208b7c9" class="bulleted-list"><li style="list-style-type:circle">Identify security vulnerabilities in the interface, implementation and instance</li></ul></li></ul><ul id="e3b03559-1dd7-44fe-b652-04d107b72b06" class="bulleted-list"><li style="list-style-type:disc">Production testing<ul id="610f98c6-db36-488c-bc05-f84533942fe9" class="bulleted-list"><li style="list-style-type:circle">Identify usability, functionality and performance bugs in the production environment</li></ul></li></ul></div></p></details></li></ul><ul id="b53d209d-c8d9-4333-af5b-1afffded5f8e" class="toggle"><li><details open=""><summary>Deployment</summary><ul id="2805828f-f5d6-4fc8-8a68-c1bfb507e5a9" class="bulleted-list"><li style="list-style-type:disc">Dealing with uncertainty<ul id="84f85148-9e32-4d33-9699-3613508834ce" class="bulleted-list"><li style="list-style-type:circle">A popular method for eliminating uncertainty is the principle of immutability<ul id="52a704fd-b123-42a1-acf1-2d9286367fef" class="bulleted-list"><li style="list-style-type:square">immutable deployment package</li></ul><ul id="95e4738a-7623-4783-8b1c-d8e8ec4aee3f" class="bulleted-list"><li style="list-style-type:square">immutable env variable</li></ul><ul id="443ab3c7-d795-4a45-8741-6d15da7a7d11" class="bulleted-list"><li style="list-style-type:square">The more is not allowed to change the safest</li></ul></li></ul></li></ul><ul id="44b55c87-9122-427e-ac0b-d6c6afab6404" class="bulleted-list"><li style="list-style-type:disc">Deployment automation<ul id="6b0c8b92-0f67-4a31-90de-4d492ea7fefe" class="bulleted-list"><li style="list-style-type:circle">doing work more quickly vs doing less work</li></ul><ul id="4d399995-d853-4cad-a978-5f698cf218aa" class="bulleted-list"><li style="list-style-type:circle">Deployment tooling and automation can be  a quick win, but can limit flexibility and have a maintenance cost</li></ul></li></ul><ul id="50ab8a94-319d-493c-abb2-680d11e9f892" class="bulleted-list"><li style="list-style-type:disc">Deployment gouvernance<ul id="873f9d91-e187-4e9b-814a-2054ae2558fe" class="bulleted-list"><li style="list-style-type:circle">Who decides when a release happen</li></ul><ul id="9a7b8c60-294b-4c09-84b2-44f9f87ac8e5" class="bulleted-list"><li style="list-style-type:circle">How the decision is communicated?</li></ul></li></ul></details></li></ul><ul id="76726d5e-8774-4406-b05a-28134f166a4b" class="toggle"><li><details open=""><summary>Security</summary><ul id="9896dc6d-7fcb-44ff-a581-382cd6df946a" class="bulleted-list"><li style="list-style-type:disc">What is security?<ul id="e48c7b80-4e94-419d-909a-542eae6a0807" class="bulleted-list"><li style="list-style-type:circle">Protecting your system, your API client and the end users</li></ul><ul id="3fa37d17-1b4d-48dd-88ab-066bee9f8c9b" class="bulleted-list"><li style="list-style-type:circle">Keeping the API up and running for legitimate use by legitimate users</li></ul><ul id="5609602b-6879-4140-a64d-949e861cc3d5" class="bulleted-list"><li style="list-style-type:circle">Protecting the privacy of data and resources</li></ul></li></ul><ul id="6a6b10fd-5a10-474d-bb3b-b90d95719ca2" class="bulleted-list"><li style="list-style-type:disc">Security is part of all the pillars</li></ul><ul id="8dc9b282-6e9c-46d1-aec9-b516b4e6fb32" class="bulleted-list"><li style="list-style-type:disc">How much security does an API need?</li></ul></details></li></ul><ul id="273ffd69-da9d-4d7a-afb4-ce8a17982341" class="toggle"><li><details open=""><summary>Monitoring</summary><ul id="0c2c17c7-c45b-41c5-ab4f-ef14f0151f07" class="bulleted-list"><li style="list-style-type:disc">What to monitor<ul id="c69796a0-8af1-4d7a-a9e2-e0d82203c143" class="bulleted-list"><li style="list-style-type:circle">Problems (errors, failures, warnings, crashes)</li></ul><ul id="d5494601-20f1-4225-a08a-fc4185834fad" class="bulleted-list"><li style="list-style-type:circle">System health (CPU, memory, I/O, container health)</li></ul><ul id="6ad77c11-6ec5-4e47-9ee2-b5448cd86cdf" class="bulleted-list"><li style="list-style-type:circle">API health (uptime, API state, total messages processed)</li></ul><ul id="0741b23b-73d3-4f63-b6b8-657d4be74edd" class="bulleted-list"><li style="list-style-type:circle">Messages logs</li></ul><ul id="26e7e0e4-655d-410c-9898-bf4812bb66d8" class="bulleted-list"><li style="list-style-type:circle">Usage data</li></ul></li></ul><ul id="61310eef-5f37-452d-aec9-94ff59f98418" class="bulleted-list"><li style="list-style-type:disc">Gouvernance:<ul id="beb66a04-0c34-4f6b-9c58-77f5c2882f0b" class="bulleted-list"><li style="list-style-type:circle">What should be monitored?</li></ul><ul id="0ab19414-51e8-4095-845e-07a175ef5f12" class="bulleted-list"><li style="list-style-type:circle">How is data collected, analysed and communicated?</li></ul><p id="c5578a83-1d62-472b-8fa8-2a4b1ba07a0a" class="">
+</p><p id="01f29236-9b22-4388-a330-9023781a666a" class="">
+</p></li></ul></details></li></ul><ul id="8312c052-f3b2-4d39-ab83-e7cf118711d3" class="toggle"><li><details open=""><summary>Discovery and promotion</summary><ul id="770afb8d-8204-44bf-9277-2049fcf5b891" class="bulleted-list"><li style="list-style-type:disc">runtime discovery<ul id="3d51913b-30f7-4641-ade0-80126d6551ae" class="bulleted-list"><li style="list-style-type:circle">to list instances automatically</li></ul></li></ul><ul id="c99714f1-4278-485c-be1f-6d895bb2dd30" class="bulleted-list"><li style="list-style-type:disc">design-time discovery<ul id="b5d800ff-a8aa-4127-8cfb-95fcc38ec33c" class="bulleted-list"><li style="list-style-type:circle">Marketing</li></ul><ul id="bbfc4b5c-ffec-44ce-9086-d3fb795b443c" class="bulleted-list"><li style="list-style-type:circle">When and how the API is advertised?</li></ul></li></ul></details></li></ul><ul id="4d86699a-33b0-4a73-b010-1cd21b97bdd1" class="toggle"><li><details open=""><summary>Change management</summary><ul id="16f96cb4-744f-49bc-a32a-74aaba2cc72b" class="bulleted-list"><li style="list-style-type:disc">Choosing the best changes to make</li></ul><ul id="d642f8e5-095d-4699-965b-b584e730c25f" class="bulleted-list"><li style="list-style-type:disc">Implementing thoses changes as fast as possible</li></ul><ul id="698cfad7-814f-479f-9acf-f739cbfa07e1" class="bulleted-list"><li style="list-style-type:disc">Making those changes without breaking anything</li></ul><p id="130d04c3-7560-4adf-a201-c9883a759f4a" class="">Gouvernance: Witch change need to be fast and witch change need to be safe?</p></details></li></ul></details></li></ul><ul id="4ea9b84e-d578-4889-8e70-13e23b9a63eb" class="toggle"><li><details open=""><summary>Continuous API Improvement</summary><p id="5c16e7ff-e130-4486-bb94-0b4604d0e073" class="">Goal is to move fast while maintaining the quality.</p><ul id="4499be14-6e10-4418-a411-55579f6d260a" class="toggle"><li><details open=""><summary>Different kind of changes</summary><ul id="944c892b-b093-44ef-a7d1-fd90b1d0c0d4" class="bulleted-list"><li style="list-style-type:disc">interface</li></ul><ul id="1201197a-88ba-4050-bd18-b0d7c5864a35" class="bulleted-list"><li style="list-style-type:disc">implementation</li></ul><ul id="3fe67f73-f634-4fa3-aa94-fb6261ab3e74" class="bulleted-list"><li style="list-style-type:disc">instance</li></ul></details></li></ul><ul id="8e2e5f95-1db3-4b4f-86a5-ee1f64d9b767" class="toggle"><li><details open=""><summary>Cycle (PDSA)</summary><ul id="5535cafb-f997-49e4-8878-9eceee7274db" class="bulleted-list"><li style="list-style-type:disc">Plan</li></ul><ul id="824ae34b-0013-42d1-8418-666c3aeb08b1" class="bulleted-list"><li style="list-style-type:disc">do<ul id="add20f6f-03b4-462b-9126-2f6e66af0462" class="bulleted-list"><li style="list-style-type:circle">the code change, the deploy</li></ul></li></ul><ul id="4a51807e-19ad-47d1-9f51-0b77381745c2" class="bulleted-list"><li style="list-style-type:disc">study</li></ul><ul id="ece2d641-2391-4bd1-ad83-1d2d376128ea" class="bulleted-list"><li style="list-style-type:disc">Act<ul id="79b753d4-1efa-43a4-9189-784c49ff58bf" class="bulleted-list"><li style="list-style-type:circle">comunicate</li></ul><ul id="113655b8-6557-4b84-9c19-878c40c4526a" class="bulleted-list"><li style="list-style-type:circle">update goals?</li></ul></li></ul></details></li></ul><ul id="28d81b3d-341c-40c8-95b4-58197d266e5b" class="toggle"><li><details open=""><summary>3 ways to improve API change velocity</summary><ul id="738eab88-f4f2-4d97-a468-02e6079f8f2d" class="bulleted-list"><li style="list-style-type:disc">Tooling and automation<ul id="d46b29b0-04af-4404-892a-2ae907842b59" class="bulleted-list"><li style="list-style-type:circle">Tools exist on the market for all part of automation</li></ul><ul id="1b056334-83df-498d-acf8-99b923c202a5" class="bulleted-list"><li style="list-style-type:circle">better to test carefully on an experimental basis</li></ul><ul id="df9b11c8-b9a3-4a70-a16c-124e98bae7f2" class="bulleted-list"><li style="list-style-type:circle">up front cost and risk with new tooling</li></ul></li></ul><ul id="dd70aa23-571a-4e06-a63c-a014d5203100" class="bulleted-list"><li style="list-style-type:disc">Organisational design and culture<ul id="8f3892c5-7a24-4b31-8ded-fc9e6fe22bc5" class="bulleted-list"><li style="list-style-type:circle">what is the coordination needed to make a change?</li></ul></li></ul><ul id="7148d3ab-4e55-4be4-a9af-4bc6aa995eaa" class="bulleted-list"><li style="list-style-type:disc">Eliminating wasted effort<ul id="ee8b937c-f57b-4eea-ac8e-57827b24b78f" class="bulleted-list"><li style="list-style-type:circle">for instance an internal API don&#x27;t need a perfect documentation</li></ul></li></ul></details></li></ul><ul id="f468339a-3f69-4958-b438-c854bd262c69" class="toggle"><li><details open=""><summary>3 ways to improve API changeability</summary><ul id="bf51501e-aeec-4bae-bdbc-4a8d91988d95" class="bulleted-list"><li style="list-style-type:disc">Effort cost<ul id="05bb73ab-4508-4665-ba9d-e7fcc2d67b6f" class="bulleted-list"><li style="list-style-type:circle">tools, organisation, beyond the scope of this book</li></ul></li></ul><ul id="c5bb55e6-e9ae-4ba9-b3f4-0b5b12a28f2c" class="bulleted-list"><li style="list-style-type:disc">Opportunity cost<ul id="ae5fc042-ce2f-4ae6-85dc-a5ce4a0bfe01" class="bulleted-list"><li style="list-style-type:circle">Lean startup methodogy for nothing critical</li></ul><ul id="89d21408-c61e-4b43-8ee5-c7752a3a8a4c" class="bulleted-list"><li style="list-style-type:circle">gather as much information before making a change</li></ul></li></ul><ul id="2151f080-75e5-4c82-8cff-c160fc7dc4a7" class="bulleted-list"><li style="list-style-type:disc">Coupling cost<ul id="31dcd543-67ed-4d41-8132-b790b353dfb9" class="bulleted-list"><li style="list-style-type:circle">Biggest problem is the coupling between the API and what consume the API</li></ul><ul id="d796050b-c6f3-4ad4-b192-fee23ef70734" class="bulleted-list"><li style="list-style-type:circle">The BDUF (Big Design Up Front) witch is an anti patern from the Agile manifesto is difficult to avoid for API.</li></ul><ul id="b37df7f1-a7be-406a-8169-c6f8d995e146" class="bulleted-list"><li style="list-style-type:circle">API tend to be difficult to change once they are made and published</li></ul></li></ul></details></li></ul></details></li></ul><ul id="d3fe8d1a-c4da-4aac-a5e2-5095b1437d89" class="toggle"><li><details open=""><summary>Screenshots</summary><figure id="704442f2-9414-4f5b-ac4c-936743065674" class="image"><a href="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-5602861720265088297-253036402.jpg"><img src="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-5602861720265088297-253036402.jpg"/></a></figure><figure id="6638b58d-8ba8-47fc-9815-06d945a2cca7" class="image"><a href="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-92267269026205190-1468082374.jpg"><img src="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-92267269026205190-1468082374.jpg"/></a></figure><figure id="cd9eb414-0c67-42af-a18f-bf7bd98fe87e" class="image"><a href="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-1611459007004443307-1471258875.jpg"><img src="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-1611459007004443307-1471258875.jpg"/></a></figure><p id="00bf56e4-cd99-4914-8e11-5860b1f13a73" class="block-color-gray"><a href="https://www.notion.soundefined"></a></p><p id="e6785fd4-eb08-4aca-943f-2a444bacd4ec" class="">
+</p><figure id="226cc0d3-92d7-48e0-9528-01da8e937825" class="image"><a href="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-1630171258671232141-345037397.jpg"><img src="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-1630171258671232141-345037397.jpg"/></a></figure><figure id="b258f0fc-abc9-43dc-94b5-f55a68ab0416" class="image"><a href="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-3557623724156680337-1952561034.jpg"><img src="Continuous%20API%20management%203e05a4a904c147d096247320366ddc3d/nse-3557623724156680337-1952561034.jpg"/></a></figure></details></li></ul><p id="e3faa67e-310a-43d7-9719-614ed90a9a94" class="">
+</p><figure id="11c0614e-c401-41f1-87a8-2f62cb9756f6"><a href="https://amzn.to/3ozfYDU" class="bookmark source"><div class="bookmark-info"><div class="bookmark-text"><div class="bookmark-title">Continuous API Management: Making the Right Decisions in an Evolving Landscape</div><div class="bookmark-description">Noté /5. Retrouvez Continuous API Management: Making the Right Decisions in an Evolving Landscape et des millions de livres en stock sur Amazon.fr. Achetez neuf ou d&#x27;occasion</div></div><div class="bookmark-href"><img src="https://www.amazon.fr/favicon.ico" class="icon bookmark-icon"/>https://amzn.to/3ozfYDU</div></div><img src="https://images-eu.ssl-images-amazon.com/images/I/51miXS-wE5L._SR600%2c315_PIWhiteStrip%2cBottomLeft%2c0%2c35_SCLZZZZZZZ_FMpng_BG255%2c255%2c255.jpg" class="bookmark-image"/></a></figure></div></article></body></html>
